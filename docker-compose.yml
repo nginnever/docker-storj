@@ -1,0 +1,30 @@
+version: "2"
+services:
+  db:
+    image: mongo:3.4.0
+    volumes:
+      - ./mongodb/data:/data/db
+  mq:
+    image: rabbitmq:3.6.6
+  bridge:
+    build: ./bridge
+    volumes:
+      - ./bridge.config.json:/root/config.json
+    command: ["storj-bridge", "-c", "/root/config.json"]
+    environment:
+      - DOCKER_SERVICES=db:27017
+  complex:
+    build: ./complex
+    volumes:
+      - ./complex.config.json:/root/config.json
+    command: ["storj-complex", "-c", "/root/config.json"]
+    environment:
+      - DOCKER_SERVICES=db:27017,mq:5672
+  farmer:
+    build: ./farmer
+    volumes:
+      - ./farmer/data:/root/.storjshare
+      - ./farmer.config.json:/root/.storjshare/config.template.json
+    environment:
+      - DOCKER_SERVICES=bridge:8080
+    command: ["storjshare", "start", "-p", "password"]
