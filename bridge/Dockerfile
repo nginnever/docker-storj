@@ -7,9 +7,8 @@ WORKDIR /usr/src/app
 ADD bridge/package.json .
 RUN npm install
 ADD bridge/ ./
-RUN npm link
 
 ADD https://raw.githubusercontent.com/retrohacker/docker-wait/master/wait.sh /bin/wait.sh
 
 ENTRYPOINT ["dumb-init", "--", "/bin/bash", "/bin/wait.sh"]
-CMD ["storj-bridge"]
+CMD ["./bin/storj-bridge.js"]

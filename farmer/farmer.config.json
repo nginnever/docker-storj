@@ -21,7 +21,9 @@
       "min": 0,
       "max": 0
     },
-    "seeds": [],
+    "seeds": [
+      "storj://renter:4000/337472da3068fa05d415262baf4df5bada8aefdc"
+    ],
     "concurrency": 3
   },
   "telemetry": {

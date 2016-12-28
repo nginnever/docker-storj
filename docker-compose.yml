@@ -1,5 +1,8 @@
 version: "2"
 services:
+  cli:
+    build: ./cli
+    image: storj-cli
   db:
     image: mongo:3.4.0
     volumes:
@@ -9,22 +12,32 @@ services:
   bridge:
     build: ./bridge
     volumes:
-      - ./bridge.config.json:/root/config.json
-    command: ["storj-bridge", "-c", "/root/config.json"]
+      - ./bridge/bridge.config.json:/root/config.json
+    command: ["./bin/storj-bridge.js", "-c", "/root/config.json"]
     environment:
       - DOCKER_SERVICES=db:27017
-  complex:
+    ports:
+      - 8080:8080
+  landlord:
     build: ./complex
     volumes:
-      - ./complex.config.json:/root/config.json
-    command: ["storj-complex", "-c", "/root/config.json"]
+      - ./complex/landlord.config.json:/root/config.json
+    command: ["./bin/storj-complex.js", "-c", "/root/config.json"]
     environment:
-      - DOCKER_SERVICES=db:27017,mq:5672
+      - DOCKER_SERVICES=bridge:8080,db:27017,mq:5672
+  renter:
+    build: ./complex
+    volumes:
+      - ./complex/renter.config.json:/root/config.json
+      - ./complex/hd-private.key:/root/hd-private.key
+    command: ["./bin/storj-complex.js", "-c", "/root/config.json"]
+    environment:
+      - DOCKER_SERVICES=bridge:8080,db:27017,mq:5672
   farmer:
     build: ./farmer
     volumes:
       - ./farmer/data:/root/.storjshare
-      - ./farmer.config.json:/root/.storjshare/config.template.json
+      - ./farmer/farmer.config.json:/root/.storjshare/config.template.json
     environment:
-      - DOCKER_SERVICES=bridge:8080
-    command: ["storjshare", "start", "-p", "password"]
+      - DOCKER_SERVICES=renter:4000
+    command: ["./bin/storjshare.js", "start", "-p", "password"]

@@ -7,7 +7,8 @@ WORKDIR /usr/src/app
 ADD core-cli/package.json .
 RUN npm install
 ADD core-cli/ ./
-RUN npm link
 
-ENTRYPOINT ["dumb-init", "--"]
-CMD ["storj"]
+WORKDIR /usr/src/data
+
+ENTRYPOINT ["dumb-init", "--", "/usr/src/app/bin/storj.js"]
+CMD ["--help"]

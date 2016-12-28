@@ -7,9 +7,8 @@ WORKDIR /usr/src/app
 ADD complex/package.json ./
 RUN npm install
 ADD complex/ ./
-RUN npm link
 
 ADD https://raw.githubusercontent.com/retrohacker/docker-wait/master/wait.sh /bin/wait.sh
 
 ENTRYPOINT ["dumb-init", "--", "/bin/bash", "/bin/wait.sh"]
-CMD ["storj-complex"]
+CMD ["./bin/storj-complex.js"]
