@@ -21,18 +21,19 @@ services:
   landlord:
     build: ./complex
     volumes:
-      - ./complex/landlord.config.json:/root/config.json
+      - ./complex/landlord.config.json:/root/config.template.json
     command: ["./bin/storj-complex.js", "-c", "/root/config.json"]
     environment:
       - DOCKER_SERVICES=bridge:8080,db:27017,mq:5672
   renter:
     build: ./complex
     volumes:
-      - ./complex/renter.config.json:/root/config.json
+      - ./complex/renter.config.json:/root/config.template.json
       - ./complex/hd-private.key:/root/hd-private.key
     command: ["./bin/storj-complex.js", "-c", "/root/config.json"]
     environment:
       - DOCKER_SERVICES=bridge:8080,db:27017,mq:5672
+    restart: always
   farmer:
     build: ./farmer
     volumes:

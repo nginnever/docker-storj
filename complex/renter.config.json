@@ -12,7 +12,7 @@
     "renterOverlap": 0,
     "networkOpts": {
       "rpcPort": 4000,
-      "rpcAddress": "0.0.0.0",
+      "rpcAddress": "{{ IP_ADDRESS }}",
       "doNotTraverseNat": true,
       "tunnelServerPort": 5000,
       "tunnelGatewayRange": {

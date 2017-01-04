@@ -19,7 +19,7 @@
     }
   },
   "complex": {
-    "rpcUrl": "http://complex:8081",
+    "rpcUrl": "http://landlord:8081",
     "rpcUser": "user",
     "rpcPassword": "pass"
   },
